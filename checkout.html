@@ -1,0 +1,841 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<meta name="description" content="Secure checkout for your Oriflame beauty and personal care order in Sri Lanka.">
+<meta name="theme-color" content="#141b16">
+<meta property="og:title" content="Checkout — Oriflame Sri Lanka">
+<meta property="og:description" content="Complete your secure checkout for skincare, makeup, and personal care items from Oriflame Sri Lanka.">
+<meta property="og:type" content="website">
+<title>Oriflame — Checkout</title>
+<link rel="canonical" href="https://example.com/checkout.html">
+<link rel="manifest" href="/manifest.webmanifest">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<script defer src="site-core.js"></script>
+<style>
+  :root{
+    --bg:#ffffff;
+    --ink:#141b16;
+    --muted:#8a938c;
+    --line:#e9ebe6;
+    --card:#f6f7f4;
+    --green-a:#ffb0b075;
+    --green-b:#f18377;
+    --green-ink:#420202;
+    --black:#141414;
+    --radius-lg:26px;
+    --radius-md:18px;
+    --radius-sm:14px;
+    --radius-full:999px;
+    --maxw:1200px;
+    --text:#141b16;
+    --text-dim:#8a938c;
+    --text-faint:#b2b8ae;
+    --input-border:#e3e6de;
+    --accent:#141414;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:'Plus Jakarta Sans', system-ui, sans-serif;}
+
+  .topbar{display:flex;align-items:center;justify-content:center;position:relative;padding:22px 32px;border-bottom:1px solid var(--line);background:#fff;}
+  .brand{display:flex;align-items:center;gap:8px;font-weight:800;letter-spacing:.5px;font-size:19px;color:var(--text);}
+  .brand-logo{height:28px;width:auto;display:block;}
+  .brand .dot{width:9px;height:9px;border-radius:50%;background:var(--accent);display:inline-block;}
+  .brand-lk{color:var(--text-dim);font-weight:700;font-size:14px;margin-left:2px;}
+  .cart-icon{position:absolute;right:32px;top:50%;transform:translateY(-50%);}
+  .cart-icon svg{width:20px;height:20px;stroke:var(--text);fill:none;}
+
+  /* ---- Layout shell ---- */
+  .layout{display:grid;grid-template-columns:1fr 1fr;max-width:1920px;margin:0 auto;min-height:calc(100vh - 66px);}
+  .left{padding:48px 64px 48px 220px;border-right:1px solid var(--line);}
+  .right{padding:48px 96px 48px 64px;background:var(--card);}
+
+  /* Mobile collapsible summary bar — hidden on desktop */
+  .summary-bar{display:none;}
+  .summary-panel-mobile-wrap{display:none;}
+
+  h2.section-title{font-size:18px;font-weight:800;margin:0 0 16px 0;color:var(--text);}
+  .row-between{display:flex;align-items:center;justify-content:space-between;margin-bottom:16px;}
+  .row-between h2{margin:0;}
+  .signin{color:var(--accent);font-size:13px;font-weight:600;text-decoration:none;cursor:pointer;}
+  .signin:hover{text-decoration:underline;}
+
+  .field{position:relative;margin-bottom:12px;}
+  .field input, .select-wrap select{
+    width:100%;background:#fff;border:1.5px solid var(--input-border);
+    border-radius:var(--radius-sm);color:var(--text);padding:14px 40px 14px 16px;font-size:14px;
+    outline:none;appearance:none;-webkit-appearance:none;
+    transition:border-color .15s;
+  }
+  .field input::placeholder{color:var(--text-faint);}
+  .field input:focus, .select-wrap select:focus{border-color:var(--accent);}
+  .field input.field-error{border-color:#e0554a;}
+  .form-warning{
+    display:none;background:#fdece9;border:1.5px solid #f1a89f;color:#a83a2e;
+    border-radius:var(--radius-sm);padding:12px 16px;font-size:13px;margin-bottom:16px;
+  }
+  .form-warning.show{display:block;}
+  .field .help-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--text-faint);pointer-events:none;}
+  .field .help-icon svg{width:16px;height:16px;display:block;}
+
+  .checkbox-row{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px;font-size:13px;color:var(--text);line-height:1.4;}
+  .checkbox-row input[type="checkbox"]{width:16px;height:16px;accent-color:var(--accent);border-radius:4px;cursor:pointer;flex-shrink:0;margin-top:1px;}
+  .suggested-product-list{display:grid;grid-template-columns:1fr;gap:12px;margin-top:12px;}
+  .suggested-item{display:flex;align-items:center;gap:12px;padding:10px 12px;background:#fff;border:1px solid var(--line);border-radius:14px;}
+  .suggested-item img{width:56px;height:56px;object-fit:cover;border-radius:10px;display:block;}
+  .suggested-item .meta{min-width:0;flex:1;}
+  .suggested-item .title{font-size:13px;font-weight:700;color:var(--text);}
+  .suggested-item .tag{font-size:11px;color:var(--text-dim);margin-top:4px;}
+  .suggested-item .price{font-weight:800;font-size:13px;color:var(--text);}
+
+  .section-gap{margin-top:32px;}
+
+  .select-wrap{position:relative;margin-bottom:14px;}
+  .select-wrap label{position:absolute;top:8px;left:16px;font-size:10px;color:var(--text-dim);letter-spacing:.3px;font-weight:600;}
+  .select-wrap select{padding-top:24px;padding-bottom:9px;color:var(--text);font-size:14px;cursor:pointer;}
+  .select-wrap .chev{position:absolute;right:16px;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--text-dim);font-size:12px;}
+
+  .two-col{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+
+  .shipping-option{
+    border:1.5px solid var(--input-border);border-radius:var(--radius-md);padding:18px;
+    display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;background:#fff;
+  }
+  .shipping-option .label b{font-size:14px;display:block;color:var(--text);}
+  .shipping-option .label span{font-size:12px;color:var(--text-dim);}
+  .shipping-price{font-weight:700;font-size:14px;color:var(--text);}
+
+  .payment-desc{color:var(--text-dim);font-size:13px;margin:0 0 16px 0;}
+
+  .pay-option{
+    border:1.5px solid var(--input-border);border-radius:var(--radius-md);padding:18px;margin-bottom:12px;
+    display:flex;flex-direction:column;gap:14px;background:#fff;cursor:pointer;transition:border-color .15s;
+  }
+  .pay-option.selected{border-color:var(--accent);}
+  .pay-header{display:flex;align-items:center;justify-content:space-between;width:100%;gap:8px;}
+  .pay-header-left{display:flex;align-items:center;gap:10px;min-width:0;}
+  .radio{width:18px;height:18px;border-radius:50%;border:1.5px solid var(--text-faint);display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;}
+  .radio.on{border-color:var(--accent);}
+  .radio.on::after{content:"";width:9px;height:9px;background:var(--accent);border-radius:50%;}
+  .pay-label{font-weight:700;font-size:14px;line-height:1.3;color:var(--text);}
+  .card-icons{display:flex;gap:6px;align-items:center;flex-shrink:0;}
+  .card-icons .badge{height:22px;padding:0 7px;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:800;color:#fff;}
+  .badge.visa{background:#1a1f71;}
+  .badge.mc{background:linear-gradient(90deg,#eb001b,#f79e1b);}
+  .badge.amex{background:#2e77bb;}
+  .badge.more{background:#333;color:#ccc;font-weight:600;}
+  .badge.bank{background:var(--card);font-size:14px;}
+  .badge.whatsapp{background:#25D366;padding:0 7px;}
+
+  .bank-details, .whatsapp-details{
+    width:100%;background:var(--card);border:1.5px solid var(--input-border);border-radius:var(--radius-md);
+    padding:16px;margin-top:-2px;
+  }
+  .bank-note{font-size:12.5px;color:var(--text-dim);line-height:1.6;margin:0 0 14px 0;}
+
+  .orderid-row{
+    background:#fff;border:1.5px solid var(--input-border);border-radius:var(--radius-sm);
+    padding:14px 16px;margin-bottom:14px;
+  }
+  .orderid-label{font-size:10.5px;color:var(--text-dim);letter-spacing:.4px;margin-bottom:6px;font-weight:700;text-transform:uppercase;}
+  .orderid-copy{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+  .orderid-copy span{font-size:16px;font-weight:800;letter-spacing:.5px;color:var(--text);}
+  .copy-btn{
+    background:var(--black);color:#fff;border:none;border-radius:var(--radius-full);
+    padding:8px 16px;font-size:12.5px;font-weight:700;cursor:pointer;flex-shrink:0;
+    transition:background .15s;
+  }
+  .copy-btn.copied{background:#25D366;color:#fff;}
+
+  .bank-row{display:flex;justify-content:space-between;font-size:13px;padding:9px 0;border-top:1px solid var(--line);}
+  .bank-row:first-of-type{border-top:none;}
+  .bank-row span{color:var(--text-dim);}
+  .bank-row b{font-weight:700;color:var(--text);}
+
+  .whatsapp-btn{
+    width:100%;background:#25D366;color:#fff;border:none;border-radius:var(--radius-full);
+    padding:14px;font-size:14px;font-weight:700;cursor:pointer;
+    display:flex;align-items:center;justify-content:center;gap:8px;
+  }
+
+  /* Confirmation modal */
+  .modal-overlay{
+    display:none;position:fixed;inset:0;background:rgba(20,27,22,.45);
+    align-items:center;justify-content:center;z-index:100;padding:20px;
+  }
+  .modal-overlay.show{display:flex;}
+  .modal-box{
+    background:#fff;border:1px solid var(--line);border-radius:var(--radius-lg);
+    padding:36px 30px;max-width:380px;width:100%;text-align:center;
+    box-shadow:0 20px 60px rgba(20,27,22,.15);
+  }
+  .modal-icon{
+    width:56px;height:56px;border-radius:50%;background:rgba(37,211,102,.12);
+    display:flex;align-items:center;justify-content:center;margin:0 auto 18px;font-size:26px;
+  }
+  .modal-box h3{margin:0 0 10px 0;font-size:19px;font-weight:800;color:var(--text);}
+  .modal-box p{margin:0 0 24px 0;font-size:13.5px;color:var(--text-dim);line-height:1.6;}
+  .modal-close-btn{
+    width:100%;background:var(--black);color:#fff;border:none;border-radius:var(--radius-full);
+    padding:14px;font-size:14px;font-weight:700;cursor:pointer;
+  }
+
+  .pay-now-btn{
+    width:100%;background:var(--black);color:#fff;border:none;border-radius:var(--radius-full);
+    padding:16px;font-size:15px;font-weight:700;cursor:pointer;margin-top:24px;
+    transition:opacity .15s;
+  }
+  .pay-now-btn:hover{opacity:.88;}
+
+  .bottom-nav{
+    position:fixed; bottom:0; left:0; right:0; z-index:60;
+    background:#fff; border-top:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-around;
+    padding:12px 10px calc(12px + env(safe-area-inset-bottom));
+  }
+  .nav-item{
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    color:var(--muted); position:relative; background:none; border:none; text-decoration:none;
+  }
+  .nav-item svg{width:22px; height:22px; stroke:var(--muted); fill:none;}
+  .nav-item.active{color:var(--ink);}
+  .nav-item.active svg{stroke:var(--ink);}
+  .nav-item.active::after{
+    content:""; position:absolute; bottom:-9px; width:16px; height:2.5px; background:var(--ink); border-radius:2px;
+  }
+  .nav-item .cart-badge{
+    position:absolute; top:-6px; right:-8px; background:var(--black); color:#fff;
+    font-size:9px; font-weight:700; width:15px; height:15px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  .footer-links a{color:var(--text-dim);text-decoration:none;font-weight:500;}
+  .footer-links a:hover{text-decoration:underline;color:var(--text);}
+
+  /* ---- Order summary (right panel) ---- */
+  .order-item{
+    display:flex;align-items:center;justify-content:space-between;padding:12px 0;
+    border-bottom:1px solid var(--line);
+  }
+  .order-item .thumb{
+    width:56px;height:56px;border-radius:var(--radius-sm);overflow:hidden;
+    background:#fff;border:1px solid var(--line);display:flex;align-items:center;justify-content:center;flex-shrink:0;
+  }
+  .order-item .thumb img{width:100%;height:100%;object-fit:cover;}
+
+  @media (max-width: 900px){
+    .topbar{padding:16px;}
+    .brand{font-size:16px;}
+    .brand-logo{height:22px;}
+    .cart-icon{right:16px;}
+    .cart-icon svg{width:18px;height:18px;}
+
+  .layout{grid-template-columns:1fr;display:flex;flex-direction:column;min-height:0; padding-bottom:72px;}
+    .left{border-right:none;padding:20px 16px 40px;order:2;}
+    .right{display:none;}
+
+    .summary-bar{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:16px;border-bottom:1px solid var(--line);cursor:pointer;user-select:none;
+      order:1;background:#fff;
+    }
+    .summary-bar-left{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text);}
+    .summary-bar-left .chev{
+      width:8px;height:8px;border-right:1.6px solid var(--text);border-bottom:1.6px solid var(--text);
+      transform:rotate(45deg);transition:transform .2s;
+    }
+    .summary-bar-left .chev.open{transform:rotate(-135deg);}
+    .summary-bar-right{font-size:15px;font-weight:800;color:var(--text);}
+
+    .summary-panel-mobile-wrap{
+      display:block;order:1;max-height:0;overflow:hidden;transition:max-height .25s ease;
+      background:var(--card);border-bottom:1px solid var(--line);
+    }
+    .summary-panel-mobile-wrap.open{max-height:700px;}
+    .summary-panel-inner{padding:16px;}
+
+    h2.section-title{font-size:16px;}
+    .two-col{gap:10px;}
+    .pay-now-btn{padding:15px;}
+  }
+
+  .site-footer{
+     display:none;
+     margin-top:32px;
+     border-top:1px solid var(--line);
+     background:#fff;
+     padding:32px 20px 24px;
+  }
+  .site-footer .wrap{max-width:1200px; margin:0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:30px;}
+  .footer-col{min-width:150px;}
+  .footer-col h4{font-size:13px; font-weight:700; margin:0 0 14px;}
+  .footer-col a{display:block; font-size:13px; color:var(--text-dim); margin-bottom:10px;}
+  .footer-bottom{max-width:1200px; margin:28px auto 0; padding-top:20px; border-top:1px solid var(--line); font-size:12px; color:var(--text-dim);}
+
+  @media (min-width: 901px){
+  .bottom-nav{display:none;}
+  .site-footer{display:block;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="topbar">
+    <a href="index.html" class="brand" aria-label="Go to home page"><img src="assets/logo-placeholder.png" alt="Oriflame LK" class="brand-logo"></a>
+    <div class="cart-icon">
+      <svg viewBox="0 0 24 24" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+    </div>
+  </div>
+
+  <div class="layout">
+
+    <!-- Mobile-only: collapsible order summary bar -->
+    <div class="summary-bar" onclick="toggleSummary()">
+      <div class="summary-bar-left">
+        <span>Order summary</span>
+        <span class="chev" id="chev">▾</span>
+      </div>
+      <div class="summary-bar-right" id="mobileSummaryTotal">Rs 0</div>
+    </div>
+    <div class="summary-panel-mobile-wrap" id="summaryPanel">
+      <div class="summary-panel-inner" id="mobileSummaryInner">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+    <!-- LEFT: form (full-width on mobile) -->
+    <div class="left">
+
+      <div class="row-between">
+        <h2 class="section-title">Contact</h2>
+        <a class="signin" href="index.html">Sign in</a>
+      </div>
+      <div class="field">
+        <input type="email" placeholder="Email" id="fEmail">
+        <span class="help-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 3.5"/><circle cx="12" cy="17" r=".3" fill="currentColor"/></svg>
+        </span>
+      </div>
+      <label class="checkbox-row"><input type="checkbox" id="emailOffers"> Email me with news and offers</label>
+
+      <div class="section-gap">
+        <h2 class="section-title">Delivery</h2>
+
+        <div class="select-wrap">
+          <label>Country/Region</label>
+          <select id="fCountry"><option>Sri Lanka</option></select>
+          <span class="chev">▾</span>
+        </div>
+
+        <div class="two-col">
+          <div class="field"><input type="text" placeholder="First name" id="fFirst"></div>
+          <div class="field"><input type="text" placeholder="Last name" id="fLast"></div>
+        </div>
+
+        <div class="field"><input type="text" placeholder="Address" id="fAddress"></div>
+        <div class="field"><input type="text" placeholder="Apartment, suite, etc. (optional)" id="fApt"></div>
+
+        <div class="two-col">
+          <div class="field"><input type="text" placeholder="City" id="fCity"></div>
+          <div class="field"><input type="text" placeholder="Postal code (optional)" id="fPostal"></div>
+        </div>
+
+        <div class="field">
+          <input type="tel" placeholder="Phone" id="fPhone">
+          <span class="help-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="10"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.5-2.5 2-2.5 3.5"/><circle cx="12" cy="17" r=".3" fill="currentColor"/></svg>
+          </span>
+        </div>
+
+        <label class="checkbox-row"><input type="checkbox" id="saveInfo"> Save this information for next time</label>
+        <label class="checkbox-row"><input type="checkbox" id="smsOffers"> Text me with news and offers</label>
+      </div>
+
+      <div class="section-gap" id="customerSuggestedBlock">
+        <h2 class="section-title">Recommended for you</h2>
+        <div id="suggestedProducts" class="suggested-product-list"></div>
+      </div>
+
+      <div class="section-gap">
+        <h2 class="section-title">Shipping method</h2>
+        <div class="shipping-option">
+          <div class="label"><b>Standard</b><span>2 - 4 Business Days</span></div>
+          <div class="shipping-price">Rs 399.00</div>
+        </div>
+      </div>
+
+      <div class="section-gap">
+        <h2 class="section-title">Payment</h2>
+        <p class="payment-desc">All transactions are secure and encrypted.</p>
+
+        <div class="pay-option selected" id="payBank">
+          <div class="pay-header">
+            <div class="pay-header-left">
+              <span class="radio on"></span>
+              <span class="pay-label">Direct Bank Transfer</span>
+            </div>
+            <div class="card-icons"><span class="badge bank">🏦</span></div>
+          </div>
+          <div class="bank-details" id="bankDetails" style="display:block;">
+            <p class="bank-note">Make your payment directly into our bank account using the Order ID below as the payment reference. Your order will be processed once we've confirmed payment.</p>
+
+            <div class="orderid-row">
+              <div class="orderid-label">Order ID</div>
+              <div class="orderid-copy">
+                <span id="orderIdValue">--</span>
+                <button class="copy-btn" onclick="copyOrderId()" id="copyBtn">Copy</button>
+              </div>
+            </div>
+
+            <div class="bank-row"><span>Bank</span><b id="bankNameDisplay">Commercial Bank</b></div>
+            <div class="bank-row"><span>Account Name</span><b>Oriflame LK</b></div>
+            <div class="bank-row"><span>Account Number</span><b>8001234567</b></div>
+            <div class="bank-row"><span>Branch</span><b>Negombo</b></div>
+          </div>
+        </div>
+
+        <div class="pay-option" id="payWhatsapp">
+          <div class="pay-header">
+            <div class="pay-header-left">
+              <span class="radio"></span>
+              <span class="pay-label">Order via WhatsApp</span>
+            </div>
+            <div class="card-icons"><span class="badge whatsapp">WA</span></div>
+          </div>
+          <div class="whatsapp-details" id="waDetails" style="display:none;">
+            <p class="bank-note">Skip the checkout form and send us your order directly on WhatsApp — we'll confirm availability, shipping, and payment with you there.</p>
+            <div class="form-warning" id="formWarning"></div>
+            <button class="whatsapp-btn" onclick="sendToWhatsApp()">Continue on WhatsApp</button>
+          </div>
+        </div>
+
+        <button class="pay-now-btn" onclick="confirmBankTransfer()">I've made the transfer</button>
+      </div>
+
+      <div class="footer-links" style="margin-top:22px;display:flex;gap:16px;flex-wrap:wrap;font-size:13px;">
+        <a href="refund-policy.html">Refund policy</a>
+        <a href="shipping.html">Shipping</a>
+        <a href="terms-of-service.html">Terms of service</a>
+        <a href="contact.html">Contact</a>
+      </div>
+
+    </div>
+
+    <nav class="bottom-nav" aria-label="Mobile navigation">
+      <a href="index.html" class="nav-item" aria-label="Home">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg>
+      </a>
+      <a href="categories.html" class="nav-item" aria-label="Categories">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg>
+      </a>
+      <a href="track.html" class="nav-item" aria-label="Track order">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+      </a>
+      <a href="cart.html" class="nav-item active" aria-label="Bag" id="mobileBagBtn">
+        <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+        <span class="cart-badge" id="mobileBagCount">0</span>
+      </a>
+    </nav>
+
+    <!-- RIGHT: order summary (desktop only) -->
+    <div class="right">
+      <div id="orderSummaryInner">
+        <!-- populated by JS -->
+      </div>
+    </div>
+
+  </div>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-col">
+        <a href="index.html" class="brand" style="margin-bottom:10px;" aria-label="Go to home page"><img src="assets/logo-placeholder.png" alt="Oriflame LK" class="brand-logo"></a>
+        <p style="font-size:13px; color:var(--text-dim); max-width:220px; line-height:1.5;">Skincare, makeup and fragrance curated in Sri Lanka with simple ordering, local delivery and WhatsApp support.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="categories.html?cat=Skincare">Skincare</a>
+        <a href="categories.html?cat=Makeup">Makeup</a>
+        <a href="categories.html?cat=Fragrance">Fragrance</a>
+        <a href="categories.html?cat=Hair">Hair</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="track.html">Track order</a>
+        <a href="returns.html">Returns</a>
+        <a href="shipping.html">Shipping</a>
+        <a href="contact.html">Contact us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="careers.html">Careers</a>
+        <a href="privacy-policy.html">Privacy policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Oriflame LK. Product availability, pricing and delivery timelines are confirmed before dispatch.</div>
+  </footer>
+
+  <!-- Confirmation modal -->
+  <div id="confirmModal" class="modal-overlay" aria-hidden="true">
+    <div class="modal-box">
+      <div class="modal-icon">✅</div>
+      <h3>Thanks — order placed</h3>
+      <p id="modalCopy">Your order is in our system. We'll confirm availability and payment shortly.</p>
+      <button class="modal-close-btn" onclick="closeConfirmModal()">Close</button>
+    </div>
+  </div>
+
+<script>
+  // Integrations: use site localStorage keys
+  const CART_KEY = 'oriflameCart';
+  const INVENTORY_KEY = 'oriflameInventory';
+  const ORDER_KEY = 'oriflameOrders';
+  const CUSTOMER_PREF_KEY = 'oriflameCustomerPrefs';
+  const FREE_DELIVERY_AT = 3000;
+  const DELIVERY_FEE = 399;
+  const WHATSAPP_NUMBER = '+94703327530';
+
+  // Helpers for storage
+  function getCustomerPrefs(){
+    try {
+      const saved = JSON.parse(localStorage.getItem(CUSTOMER_PREF_KEY));
+      return saved && typeof saved === 'object' ? saved : { preferredCategories: [], recentCategories: [], lastOrderTotal: 0 };
+    } catch { return { preferredCategories: [], recentCategories: [], lastOrderTotal: 0 }; }
+  }
+  function saveCustomerPrefs(prefs){ localStorage.setItem(CUSTOMER_PREF_KEY, JSON.stringify(prefs)); }
+  function recordCustomerPreference(category){
+    if (!category) return;
+    const prefs = getCustomerPrefs();
+    const categories = Array.isArray(prefs.preferredCategories) ? prefs.preferredCategories : [];
+    const recent = Array.isArray(prefs.recentCategories) ? prefs.recentCategories : [];
+    const next = categories.includes(category) ? categories : [category, ...categories];
+    const updated = {
+      ...prefs,
+      preferredCategories: next.slice(0, 5),
+      recentCategories: [category, ...recent.filter(item => item !== category)].slice(0, 8),
+      lastCategory: category
+    };
+    saveCustomerPrefs(updated);
+  }
+  function getInventoryCatalog(){
+    try { return JSON.parse(localStorage.getItem(INVENTORY_KEY)) || []; } catch { return []; }
+  }
+  function normalizeProduct(item){
+    const status = item.status || (Number(item.stock) <= 0 ? 'Out of stock' : 'Active');
+    return {
+      ...item,
+      brand:item.brand || 'Oriflame LK',
+      name:item.name || 'Product',
+      price:item.price || 'Rs. 0',
+      image:item.image || 'productImage.webp',
+      tag:status === 'Out of stock' ? 'OUT OF STOCK' : status === 'Low stock' ? 'LOW STOCK' : item.tag || null,
+      status
+    };
+  }
+  let products = getInventoryCatalog().map(normalizeProduct).filter(p => p.status !== 'Hidden');
+
+  function refreshProducts(){ products = getInventoryCatalog().map(normalizeProduct).filter(p => p.status !== 'Hidden'); }
+
+  function getCart(){ try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; } catch { return []; } }
+  function saveCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+  function getOrders(){ try { return JSON.parse(localStorage.getItem(ORDER_KEY)) || []; } catch { return []; } }
+  function saveOrders(list){ localStorage.setItem(ORDER_KEY, JSON.stringify(list)); }
+
+  function getHeldStockMap(){
+    const holds = {};
+    const pending = new Set(['New','WhatsApp confirmed','Payment pending','Pending payment','Pending']);
+    getOrders().forEach(order => {
+      if (!order || !pending.has(order.status)) return;
+      (order.items || []).forEach(item => {
+        const qty = Number(item.qty || 0);
+        if (!item.slug || qty <= 0) return;
+        holds[item.slug] = (holds[item.slug] || 0) + qty;
+      });
+    });
+    return holds;
+  }
+
+  function getAvailableStock(slug){
+    refreshProducts();
+    const product = products.find(p => p.slug === slug);
+    if (!product) return 0;
+    return Math.max(0, Number(product.stock || 0) - (getHeldStockMap()[slug] || 0));
+  }
+
+  function priceNumber(price){ return Number(String(price).replace(/[^\d]/g, '')) || 0; }
+  function money(value){ return `Rs ${value.toLocaleString('en-US')}`; }
+
+  function cartLines(){
+    return getCart().map(item => ({...item, product: products.find(p => p.slug === item.slug)})).filter(l => l.product && l.product.status !== 'Hidden');
+  }
+
+  function totals(){
+    const subtotal = cartLines().reduce((s, line) => s + priceNumber(line.product.price) * line.qty, 0);
+    const delivery = subtotal === 0 || subtotal >= FREE_DELIVERY_AT ? 0 : DELIVERY_FEE;
+    return { subtotal, delivery, total: subtotal + delivery };
+  }
+
+  // Render functions
+  function renderSummaryPanels(){
+    const lines = cartLines();
+    const mobileInner = document.getElementById('mobileSummaryInner');
+    const mobileTotalEl = document.getElementById('mobileSummaryTotal');
+    const orderSummaryInner = document.getElementById('orderSummaryInner');
+
+    if (!lines.length){
+      mobileInner.innerHTML = `<div style="padding:18px;color:var(--text-dim)">Your bag is empty</div>`;
+      orderSummaryInner.innerHTML = `<div style="padding:18px;color:var(--text-dim)"><h3 style="color:var(--text);margin:0 0 6px 0;">Order summary</h3><p style="margin:0;">Your bag is empty</p></div>`;
+      mobileTotalEl.textContent = money(0);
+      setTotalsDisplay(0,0,0);
+      return;
+    }
+
+    const itemHtml = lines.map(l => `
+      <div class="order-item">
+        <div style="display:flex;gap:12px;align-items:center;">
+          <div class="thumb"><img src="${l.product.image}" alt="${l.product.name}"></div>
+          <div style="min-width:0">
+            <div style="font-size:11.5px;color:var(--text-dim);font-weight:700;letter-spacing:.2px;">${l.product.brand}</div>
+            <div style="font-weight:700;color:var(--text);margin-top:2px;">${l.product.name}</div>
+            <div style="font-size:12.5px;color:var(--text-dim);margin-top:5px">Qty: ${l.qty} ${l.product.tag ? '· ' + l.product.tag : ''}</div>
+          </div>
+        </div>
+        <div style="font-weight:700;color:var(--text);white-space:nowrap;">${money(priceNumber(l.product.price) * l.qty)}</div>
+      </div>
+    `).join('');
+
+    mobileInner.innerHTML = itemHtml + renderTotalsBlock();
+    orderSummaryInner.innerHTML = `<div style="margin-bottom:8px"><h3 style="margin:0 0 4px 0;font-size:18px;font-weight:800;color:var(--text);">Order summary</h3><div style="color:var(--text-dim);font-size:13px;">${lines.length} item${lines.length>1?'s':''}</div></div>` + itemHtml + renderTotalsBlock(true);
+
+    const t = totals();
+    mobileTotalEl.textContent = money(t.total);
+    document.getElementById('orderIdValue').textContent = generateOrderId();
+  }
+
+  function renderTotalsBlock(){
+    const t = totals();
+    const freeNote = t.subtotal >= FREE_DELIVERY_AT ? 'Free delivery unlocked.' : `Add ${money(FREE_DELIVERY_AT - t.subtotal)} more for free delivery.`;
+    return `
+      <div style="padding:16px 0 4px;">
+        <div style="display:flex;justify-content:space-between;color:var(--text-dim);font-size:14px;"><span>Subtotal</span><span style="color:var(--text);">${money(t.subtotal)}</span></div>
+        <div style="display:flex;justify-content:space-between;color:var(--text-dim);margin-top:8px;font-size:14px;"><span>Delivery</span><span style="color:var(--text);">${t.delivery===0?'Free':money(t.delivery)}</span></div>
+        <div style="display:flex;justify-content:space-between;margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-weight:800;font-size:16px;color:var(--text);"><span>Total</span><span>${money(t.total)}</span></div>
+        <div style="margin-top:10px;color:var(--text-dim);font-size:12.5px">${freeNote}</div>
+      </div>
+    `;
+  }
+
+  function setTotalsDisplay(sub, del, tot){
+    const mobileTotalEl = document.getElementById('mobileSummaryTotal');
+    if (mobileTotalEl) mobileTotalEl.textContent = money(tot);
+  }
+
+  function renderSuggestedProducts(){
+    const prefs = getCustomerPrefs();
+    const preferred = Array.isArray(prefs.preferredCategories) ? prefs.preferredCategories : [];
+    const selected = preferred.length ? preferred : ['Skincare', 'Makeup', 'Fragrance'];
+    const pool = products.filter(p => selected.includes(p.cat));
+    const list = pool.length ? pool.slice(0, 3) : products.slice(0, 3);
+    const container = document.getElementById('suggestedProducts');
+    if (!container) return;
+    if (!list.length) {
+      container.innerHTML = '<div style="color:var(--text-dim); font-size:13px;">Start shopping to get better product suggestions.</div>';
+      return;
+    }
+    container.innerHTML = list.map(item => `
+      <a href="product.html?item=${item.slug}" class="suggested-item" style="text-decoration:none;">
+        <img src="${item.image || 'productImage.webp'}" alt="${item.name}">
+        <div class="meta">
+          <div class="title">${item.name}</div>
+          <div class="tag">${item.cat}</div>
+        </div>
+        <div class="price">${item.price}</div>
+      </a>
+    `).join('');
+  }
+
+  function generateOrderId(){
+    return `OLK-${Date.now().toString().slice(-6)}`;
+  }
+
+  // Payment method selection wiring
+  document.addEventListener('click', (e) => {
+    const optPay = e.target.closest('.pay-option');
+    if (optPay){
+      document.querySelectorAll('.pay-option').forEach(o => {
+        o.classList.remove('selected');
+        o.querySelector('.radio')?.classList.remove('on');
+        const bd = o.querySelector('.bank-details'); if (bd) bd.style.display = 'none';
+        const wa = o.querySelector('.whatsapp-details'); if (wa) wa.style.display = 'none';
+      });
+      optPay.classList.add('selected');
+      optPay.querySelector('.radio')?.classList.add('on');
+      const bd = optPay.querySelector('.bank-details'); if (bd) bd.style.display = 'block';
+      const wa = optPay.querySelector('.whatsapp-details'); if (wa) wa.style.display = 'block';
+      const label = optPay.querySelector('.pay-label')?.textContent?.trim();
+      const payNowBtn = document.querySelector('.pay-now-btn');
+      if (label === 'Order via WhatsApp') payNowBtn.style.display = 'none';
+      else { payNowBtn.style.display = 'block'; payNowBtn.textContent = label === 'Direct Bank Transfer' ? "I've made the transfer" : 'Pay now'; }
+    }
+  });
+
+  function confirmBankTransfer(){
+    const required = ['fEmail','fFirst','fLast','fAddress','fCity','fPhone'];
+    let firstInvalid = null;
+    required.forEach(id => { const el = document.getElementById(id); if (!el || !el.value.trim()){ el && el.classList.add('field-error'); if (!firstInvalid) firstInvalid = el; } else el.classList.remove('field-error'); });
+    if (firstInvalid){ firstInvalid.scrollIntoView({behavior:'smooth', block:'center'}); firstInvalid.focus(); return; }
+
+    saveCustomerDataFromForm();
+    const lines = cartLines();
+    if (!lines.length){ alert('Your bag is empty.'); return; }
+    const over = lines.find(l => l.qty > getAvailableStock(l.slug));
+    if (over){ alert(`Only ${getAvailableStock(over.slug)} left for ${over.product.name}.`); return; }
+
+    const order = buildOrder('Pending payment');
+    saveOrders([order, ...getOrders()]);
+    saveCart([]);
+    renderSummaryPanels();
+    document.getElementById('confirmModal').classList.add('show');
+  }
+
+  function closeConfirmModal(){ document.getElementById('confirmModal').classList.remove('show'); }
+
+  function buildOrder(status){
+    const cLines = cartLines();
+    const name = [document.getElementById('fFirst')?.value.trim(), document.getElementById('fLast')?.value.trim()].filter(Boolean).join(' ');
+    const phone = document.getElementById('fPhone')?.value.trim();
+    const address = document.getElementById('fAddress')?.value.trim();
+    const paymentLabel = document.querySelector('.pay-option.selected .pay-label')?.textContent || 'Direct Bank Transfer';
+    const paymentMethod = paymentLabel.includes('WhatsApp') ? 'whatsapp' : 'bank';
+    const summary = totals();
+    return {
+      id: generateOrderId(),
+      customer: {
+        name,
+        phone,
+        address,
+        email: document.getElementById('fEmail')?.value.trim(),
+        city: document.getElementById('fCity')?.value.trim(),
+        postalCode: document.getElementById('fPostal')?.value.trim(),
+        country: document.getElementById('fCountry')?.value.trim() || 'Sri Lanka'
+      },
+      items: cLines.map(l => ({ slug: l.slug, qty: l.qty, name: l.product.name, price: l.product.price })),
+      total: summary.total,
+      source: paymentMethod === 'whatsapp' ? 'whatsapp' : 'bank_transfer',
+      payment: {
+        method: paymentMethod,
+        label: paymentLabel,
+        bank: paymentMethod === 'bank' ? 'Commercial Bank' : '',
+        app: paymentMethod === 'whatsapp' ? 'WhatsApp' : '',
+        reference: paymentMethod === 'bank' ? generateOrderId() : ''
+      },
+      status,
+      stockAdjusted: false,
+      createdAt: new Date().toISOString()
+    };
+  }
+
+  function sendToWhatsApp(){
+    const required = ['fEmail','fFirst','fLast','fAddress','fCity','fPhone'];
+    let firstInvalid = null;
+    required.forEach(id => { const el = document.getElementById(id); if (!el || !el.value.trim()){ el && el.classList.add('field-error'); if (!firstInvalid) firstInvalid = el; } else el && el.classList.remove('field-error'); });
+    if (firstInvalid){ firstInvalid.scrollIntoView({behavior:'smooth', block:'center'}); firstInvalid.focus(); showFormWarning('Please fill in all required fields before continuing on WhatsApp.'); return; }
+    hideFormWarning();
+
+    saveCustomerDataFromForm();
+    const order = buildOrder('WhatsApp confirmed');
+    saveOrders([order, ...getOrders()]);
+
+    const lines = order.items.map(i => `${i.qty} x ${i.name}`).join('\n');
+    const msg = `Hi Oriflame LK, I placed order ${order.id}.\n\nItems:\n${lines}\n\nTotal: ${money(order.total)}\nName: ${order.customer.name}\nPhone: ${order.customer.phone}\nAddress: ${order.customer.address}`;
+    const url = `https://wa.me/${WHATSAPP_NUMBER.replace(/[^\d]/g,'')}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+    saveCart([]);
+    renderSummaryPanels();
+    alert('WhatsApp order opened — we saved the order locally as pending.');
+  }
+
+  function updateBagCount(){
+    const count = getCart().reduce((sum, item) => sum + Number(item.qty || 0), 0);
+    const mobileCount = document.getElementById('mobileBagCount');
+    if (mobileCount) mobileCount.textContent = count;
+  }
+
+  function saveCustomerDataFromForm(){
+    const values = {
+      email: document.getElementById('fEmail')?.value.trim() || '',
+      firstName: document.getElementById('fFirst')?.value.trim() || '',
+      lastName: document.getElementById('fLast')?.value.trim() || '',
+      address: document.getElementById('fAddress')?.value.trim() || '',
+      city: document.getElementById('fCity')?.value.trim() || '',
+      postalCode: document.getElementById('fPostal')?.value.trim() || '',
+      phone: document.getElementById('fPhone')?.value.trim() || '',
+      country: document.getElementById('fCountry')?.value.trim() || 'Sri Lanka',
+      emailOffers: document.getElementById('emailOffers')?.checked || false,
+      smsOffers: document.getElementById('smsOffers')?.checked || false,
+      saveInfo: document.getElementById('saveInfo')?.checked || true
+    };
+    if (!values.saveInfo) return;
+    const previous = getCustomerPrefs();
+    saveCustomerPrefs({ ...previous, ...values, preferredCategories: previous.preferredCategories || [], recentCategories: previous.recentCategories || [] });
+  }
+
+  function applySavedCustomerData(){
+    const prefs = getCustomerPrefs();
+    const fields = [
+      ['fEmail', prefs.email],
+      ['fFirst', prefs.firstName],
+      ['fLast', prefs.lastName],
+      ['fAddress', prefs.address],
+      ['fCity', prefs.city],
+      ['fPostal', prefs.postalCode],
+      ['fPhone', prefs.phone],
+      ['fCountry', prefs.country || 'Sri Lanka']
+    ];
+    fields.forEach(([id, value]) => {
+      const el = document.getElementById(id);
+      if (el && value) el.value = value;
+    });
+    const emailOffers = document.getElementById('emailOffers');
+    const smsOffers = document.getElementById('smsOffers');
+    const saveInfo = document.getElementById('saveInfo');
+    if (emailOffers && typeof prefs.emailOffers === 'boolean') emailOffers.checked = prefs.emailOffers;
+    if (smsOffers && typeof prefs.smsOffers === 'boolean') smsOffers.checked = prefs.smsOffers;
+    if (saveInfo) saveInfo.checked = true;
+  }
+
+  function showFormWarning(msg){ const w = document.getElementById('formWarning'); if (w){ w.textContent = msg; w.classList.add('show'); } }
+  function hideFormWarning(){ const w = document.getElementById('formWarning'); if (w) w.classList.remove('show'); }
+
+  function copyOrderId(){ const val = document.getElementById('orderIdValue')?.textContent || ''; const btn = document.getElementById('copyBtn'); if (!val) return; navigator.clipboard?.writeText(val).then(()=>{ btn.textContent='Copied'; btn.classList.add('copied'); setTimeout(()=>{btn.textContent='Copy'; btn.classList.remove('copied');},1800); }).catch(()=>{}); }
+
+  // Quick UI helpers
+  function toggleSummary(){ const wrap = document.getElementById('summaryPanel'); const chev = document.getElementById('chev'); if (!wrap) return; wrap.classList.toggle('open'); chev.classList.toggle('open'); }
+
+  // initialize
+  (function init(){
+    refreshProducts();
+    renderSummaryPanels();
+    renderSuggestedProducts();
+    updateBagCount();
+    applySavedCustomerData();
+    ['fEmail','fFirst','fLast','fAddress','fCity','fPhone','fPostal','fCountry'].forEach(id=>{ 
+      const el=document.getElementById(id); 
+      if(el) {
+        el.addEventListener('input',()=>{
+          el.classList.remove('field-error');
+          saveCustomerDataFromForm();
+        });
+      }
+    });
+    ['emailOffers','smsOffers','saveInfo'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.addEventListener('change', saveCustomerDataFromForm);
+    });
+  })();
+</script>
+
+</body>
+</html>

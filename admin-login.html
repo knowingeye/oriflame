@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Login — Oriflame Ops</title>
+  <meta name="robots" content="noindex, nofollow">
+  <style>
+    :root {
+      --bg: #edf2e9;
+      --panel: #ffffff;
+      --line: #dfe6d9;
+      --ink: #111712;
+      --muted: #59665e;
+      --primary: #101813;
+      --primary-soft: #ecf7d9;
+      --danger: #c53434;
+    }
+    * { box-sizing: border-box; }
+    html, body { margin: 0; min-height: 100%; font-family: Arial, Helvetica, sans-serif; background: linear-gradient(135deg, #f3f7ed 0%, #e8efe5 100%); color: var(--ink); }
+    body { display: grid; place-items: center; min-height: 100vh; padding: 24px; }
+    .panel {
+      width: min(440px, 100%); background: var(--panel); border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 30px 80px rgba(17, 23, 18, 0.12);
+      padding: 28px 24px;
+    }
+    .eyebrow { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .12em; color: var(--muted); }
+    h1 { margin: 12px 0 8px; font-size: clamp(2rem, 5vw, 2.4rem); line-height: 1.1; }
+    p { margin: 0 0 18px; color: var(--muted); line-height: 1.6; }
+    label { display: block; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; color: var(--muted); margin-bottom: 8px; }
+    input {
+      width: 100%; padding: 14px 15px; border-radius: 12px; border: 1px solid var(--line); background: #f9faf8; color: var(--ink); font-size: 16px; outline: none;
+    }
+    input:focus { border-color: rgba(16, 24, 19, 0.35); }
+    button {
+      width: 100%; margin-top: 18px; border: 0; border-radius: 12px; background: var(--primary); color: white; padding: 14px 18px; font-size: 15px; font-weight: 700; cursor: pointer;
+    }
+    button:hover { filter: brightness(1.04); }
+    .error {
+      display: none; margin-top: 12px; padding: 10px 12px; border-radius: 10px; background: rgba(197, 52, 52, 0.08); color: var(--danger); font-size: 13px; border: 1px solid rgba(197, 52, 52, 0.2);
+    }
+    .error.show { display: block; }
+  </style>
+</head>
+<body>
+  <div class="panel">
+    <div class="eyebrow">Authorized access</div>
+    <h1>Operations login</h1>
+    <p>Enter the admin PIN to access the operations board.</p>
+    <form id="adminLoginForm" method="post">
+      <label for="adminPin">Admin PIN</label>
+      <input id="adminPin" name="pin" type="password" inputmode="numeric" autocomplete="current-password" required>
+      <button type="submit">Access dashboard</button>
+      <div class="error" id="adminLoginError">Invalid PIN. Please try again.</div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById('adminLoginForm');
+    const pinInput = document.getElementById('adminPin');
+    const errorBox = document.getElementById('adminLoginError');
+
+    async function submitLogin(event) {
+      event.preventDefault();
+      const pin = pinInput.value.trim();
+      if (!pin) return;
+      errorBox.classList.remove('show');
+
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'same-origin',
+        body: JSON.stringify({ pin })
+      });
+
+      if (response.ok) {
+        window.location.href = '/admin.html';
+        return;
+      }
+
+      errorBox.classList.add('show');
+      pinInput.value = '';
+      pinInput.focus();
+    }
+
+    form.addEventListener('submit', submitLogin);
+  </script>
+</body>
+</html>

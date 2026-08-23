@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Track Your Order — Oriflame LK</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  /* ===========================================================
+     Same design tokens as index.html — keep both files in sync
+     if you tweak colors, radius, or fonts on one of them.
+     =========================================================== */
+  :root{
+    --bg:#ffffff;
+    --ink:#141b16;
+    --muted:#8a938c;
+    --line:#e9ebe6;
+    --card:#f6f7f4;
+    --green-a:#cdeaa4;
+    --green-b:#9fcf78;
+    --green-ink:#173b1f;
+    --black:#141414;
+    --radius-lg:26px;
+    --radius-md:18px;
+    --radius-full:999px;
+    --maxw:1200px;
+
+    --err-bg:#fef2f2;
+    --err-bdr:#fecaca;
+    --err-text:#b91c1c;
+  }
+  *{box-sizing:border-box; margin:0; padding:0;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:'Plus Jakarta Sans', system-ui, sans-serif;
+    color:var(--ink);
+    background:var(--bg);
+    -webkit-font-smoothing:antialiased;
+    padding-bottom:84px;
+  }
+  a{color:inherit; text-decoration:none;}
+  button{font-family:inherit; cursor:pointer;}
+  img{display:block; max-width:100%;}
+
+  .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px;}
+
+  /* ---------- Top nav (desktop) — same as index.html ---------- */
+  .topnav{
+    display:none;
+    position:sticky; top:0; z-index:50;
+    background:rgba(255,255,255,.9);
+    backdrop-filter:blur(10px);
+    border-bottom:1px solid var(--line);
+  }
+  .topnav .wrap{display:flex; align-items:center; justify-content:space-between; height:78px;}
+  .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:20px; letter-spacing:-.02em;}
+  .brand-logo{height:28px; width:auto; display:block; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(20,23,18,.08));}
+  .brand .dot{width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg,var(--green-a),var(--green-b));}
+  .brand-lk{
+    font-size:10px; font-weight:800; background:var(--black); color:#fff;
+    padding:2px 6px; border-radius:5px; margin-left:2px; letter-spacing:.03em; vertical-align:2px;
+  }
+  .nav-links{display:flex; gap:34px; font-weight:600; font-size:14.5px; color:var(--ink);}
+  .nav-links a{opacity:.7; transition:opacity .15s;}
+  .nav-links a:hover, .nav-links a.active{opacity:1;}
+  .nav-right{display:flex; align-items:center; gap:18px;}
+  .icon-btn{
+    width:42px; height:42px; border-radius:50%; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; background:#fff;
+  }
+  .icon-btn svg{width:18px; height:18px;}
+
+  /* ---------- Mobile header — same as index.html ---------- */
+  .mobile-header{padding:22px 20px 4px;}
+  .mobile-header .row{display:flex; align-items:center; justify-content:space-between;}
+  .mh-back{
+    width:44px; height:44px; border-radius:50%; border:1px solid var(--line);
+    display:flex; align-items:center; justify-content:center; background:#fff;
+  }
+  .mh-title{font-size:19px; font-weight:800; letter-spacing:-.02em;}
+
+  /* ---------- Page heading (desktop) ---------- */
+  .page-head{display:none;}
+  @media (min-width:900px){
+    .page-head{
+      display:block; max-width:var(--maxw); margin:34px auto 0; padding:0 20px;
+    }
+    .page-head h1{font-size:28px; font-weight:800; letter-spacing:-.02em;}
+    .page-head p{font-size:14px; color:var(--muted); margin-top:4px;}
+  }
+
+  /* =====================================================
+     TRACKING CARD — re-themed version of the Trans Express
+     tracker: sage-green / black / Plus Jakarta Sans instead
+     of the original orange / DM Sans+IBM Plex Mono theme.
+     ===================================================== */
+  .track-wrap{padding:20px 20px 40px;}
+  .track-card{
+    max-width:520px; margin:0 auto;
+    background:var(--bg);
+    border:1px solid var(--line);
+    border-radius:var(--radius-lg);
+    overflow:hidden;
+  }
+
+  .track-card-header{padding:26px 26px 0;}
+  .track-brand{display:flex; align-items:center; gap:12px; margin-bottom:6px;}
+  .track-icon{
+    width:40px; height:40px; border-radius:12px; background:var(--black);
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .track-icon svg{width:20px; height:20px;}
+  .track-brand h2{font-size:19px; font-weight:800; letter-spacing:-.02em; color:var(--ink);}
+  .track-card-header > p{
+    font-size:13px; color:var(--muted); margin-top:2px; padding-left:52px; line-height:1.5;
+  }
+
+  .search-section{
+    padding:20px 26px 24px; border-bottom:1px solid var(--line);
+  }
+  .input-row{display:flex; gap:10px;}
+  .waybill-input{
+    flex:1; min-width:0;
+    padding:12px 16px;
+    font-family:'Plus Jakarta Sans', sans-serif;
+    font-size:13.5px; font-weight:500; letter-spacing:.2px;
+    color:var(--ink);
+    background:var(--card);
+    border:1.5px solid var(--line);
+    border-radius:var(--radius-md);
+    outline:none;
+    transition:border-color .18s, box-shadow .18s, background .18s;
+  }
+  .waybill-input::placeholder{color:var(--muted); font-weight:400;}
+  .waybill-input:focus{
+    border-color:var(--green-b);
+    box-shadow:0 0 0 3px var(--green-a);
+    background:#fff;
+  }
+  .track-btn{
+    padding:12px 20px;
+    background:var(--black); color:#fff;
+    font-size:13.5px; font-weight:700;
+    border:none; border-radius:var(--radius-full);
+    display:flex; align-items:center; gap:7px; white-space:nowrap;
+    transition:opacity .15s, transform .1s;
+  }
+  .track-btn:hover{opacity:.88;}
+  .track-btn:active{transform:scale(.97);}
+  .track-btn:disabled{opacity:.5; cursor:not-allowed; transform:none;}
+
+  #result{}
+
+  /* ---------- Loading ---------- */
+  .loading{
+    padding:28px 26px; display:flex; align-items:center; gap:11px;
+    color:var(--muted); font-size:13.5px;
+  }
+  .spinner{
+    width:17px; height:17px; border:2px solid var(--line);
+    border-top-color:var(--black); border-radius:50%;
+    animation:spin .65s linear infinite; flex-shrink:0;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+
+  /* ---------- Error ---------- */
+  .error-wrap{padding:20px 26px 24px;}
+  .error-msg{
+    padding:13px 16px; background:var(--err-bg); border:1px solid var(--err-bdr);
+    border-radius:var(--radius-md); color:var(--err-text); font-size:13.5px;
+    display:flex; align-items:flex-start; gap:9px; line-height:1.5;
+  }
+  .error-msg svg{flex-shrink:0; margin-top:1px;}
+
+  /* ---------- Status card ---------- */
+  .status-card{
+    padding:22px 26px; border-bottom:1px solid var(--line);
+    animation:fadeUp .25s ease both;
+  }
+  .section-label{
+    font-size:10.5px; font-weight:700; letter-spacing:.9px; text-transform:uppercase;
+    color:var(--muted); margin-bottom:10px;
+  }
+  .status-badge{
+    display:inline-flex; align-items:center; gap:8px;
+    padding:6px 14px 6px 10px;
+    background:var(--green-a); border:1px solid var(--green-b);
+    border-radius:var(--radius-full);
+    font-size:13px; font-weight:700; color:var(--green-ink);
+    margin-bottom:9px;
+  }
+  .live-dot{
+    width:7px; height:7px; background:var(--green-ink); border-radius:50%;
+    animation:livepulse 2s ease-in-out infinite;
+  }
+  @keyframes livepulse{
+    0%,100%{ opacity:1; transform:scale(1); }
+    50%{ opacity:.45; transform:scale(.85); }
+  }
+  .status-desc{font-size:13.5px; color:var(--ink); opacity:.75; line-height:1.55;}
+
+  /* ---------- Timeline ---------- */
+  .timeline-section{padding:22px 26px 30px; animation:fadeUp .3s ease both;}
+  .timeline{position:relative;}
+  .t-event{display:flex; gap:13px; padding-bottom:20px;}
+  .t-event:last-child{padding-bottom:0;}
+  .t-spine{display:flex; flex-direction:column; align-items:center; flex-shrink:0; width:12px;}
+  .t-dot{
+    width:10px; height:10px; border-radius:50%; background:var(--line);
+    flex-shrink:0; margin-top:3px; transition:background .2s;
+  }
+  .t-event:first-child .t-dot{
+    width:12px; height:12px; background:var(--green-ink);
+    box-shadow:0 0 0 3px var(--green-a); margin-top:2px;
+  }
+  .t-line{flex:1; width:2px; background:var(--line); margin-top:5px; min-height:16px;}
+  .t-event:last-child .t-line{display:none;}
+  .t-content{flex:1; min-width:0;}
+  .t-name{font-size:14px; font-weight:700; color:var(--ink); line-height:1.4;}
+  .t-event:first-child .t-name{color:var(--green-ink);}
+  .t-time{font-family:ui-monospace, SFMono-Regular, Menlo, monospace; font-size:11px; color:var(--muted); margin-top:3px;}
+  .t-remarks{font-size:13px; color:var(--ink); opacity:.75; margin-top:4px; line-height:1.5;}
+
+  @keyframes fadeUp{
+    from{ opacity:0; transform:translateY(7px); }
+    to{ opacity:1; transform:translateY(0); }
+  }
+
+  /* ---------- Bottom nav (mobile) — same as index.html ---------- */
+  .bottom-nav{
+    position:fixed; bottom:0; left:0; right:0; z-index:60;
+    background:#fff; border-top:1px solid var(--line);
+    display:flex; align-items:center; justify-content:space-around;
+    padding:12px 10px calc(12px + env(safe-area-inset-bottom));
+  }
+  .nav-item{
+    display:flex; flex-direction:column; align-items:center; gap:5px;
+    color:var(--muted); position:relative; background:none; border:none; text-decoration:none;
+  }
+  .nav-item svg{width:22px; height:22px; stroke:var(--muted); fill:none;}
+  .nav-item.active{color:var(--ink);}
+  .nav-item.active svg{stroke:var(--ink);}
+  .nav-item.active::after{
+    content:""; position:absolute; bottom:-9px; width:16px; height:2.5px; background:var(--ink); border-radius:2px;
+  }
+  .nav-item .cart-badge{
+    position:absolute; top:-6px; right:-8px; background:var(--black); color:#fff;
+    font-size:9px; font-weight:700; width:15px; height:15px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+  }
+
+  /* ---------- Floating chat assistant button ---------- */
+  .chat-fab{
+    position:fixed; right:18px; bottom:calc(90px + env(safe-area-inset-bottom));
+    z-index:70;
+    width:54px; height:54px; border-radius:50%;
+    background:var(--black); border:none;
+    display:flex; align-items:center; justify-content:center;
+    box-shadow:0 10px 24px rgba(20,20,20,.28);
+    transition:transform .15s, box-shadow .15s;
+  }
+  .chat-fab svg{width:24px; height:24px;}
+  .chat-fab:hover{transform:translateY(-2px); box-shadow:0 14px 28px rgba(20,20,20,.32);}
+  .chat-fab:active{transform:scale(.94);}
+
+  .chat-panel{
+    position:fixed; right:18px; bottom:calc(156px + env(safe-area-inset-bottom));
+    width:min(340px, calc(100vw - 28px));
+    height:min(420px, calc(100vh - 160px));
+    max-height:calc(100vh - 160px);
+    background:#fff; border:1px solid rgba(20,20,20,.08); border-radius:22px;
+    box-shadow:0 18px 42px rgba(20,20,20,.18); z-index:71; overflow:hidden; opacity:0; pointer-events:none;
+    transform:translateY(12px) scale(.98); transition:all .18s ease; display:flex; flex-direction:column;
+  }
+  .chat-panel.open{opacity:1; pointer-events:auto; transform:translateY(0) scale(1);}
+  .chat-header{
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:16px 16px 12px; background:linear-gradient(135deg, #1d1d1d, #303030); color:#fff; flex-shrink:0;
+  }
+  .chat-title-wrap{display:flex; align-items:center; gap:10px;}
+  .chat-badge{width:28px; height:28px; border-radius:50%; background:rgba(255,255,255,.12); display:flex; align-items:center; justify-content:center;}
+  .chat-badge svg{width:15px; height:15px; stroke:#fff; fill:none;}
+  .chat-title{font-size:13px; font-weight:700; letter-spacing:.02em;}
+  .chat-close{
+    border:none; background:rgba(255,255,255,.08); color:#fff; width:28px; height:28px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center; font-size:18px; cursor:pointer; padding:0; line-height:1; flex-shrink:0;
+  }
+  .chat-body{padding:14px 16px 10px; display:flex; flex-direction:column; gap:12px; overflow-y:auto; flex:1; min-height:0;}
+  .chat-message{padding:10px 12px; border-radius:12px; font-size:12.5px; line-height:1.5; word-wrap:break-word;}
+  .chat-message.bot{background:#f5f5f0; color:var(--ink);}
+  .chat-message.user{background:#141414; color:#fff; margin-left:auto; max-width:80%;}
+  .chat-suggestions{display:flex; flex-wrap:wrap; gap:8px;}
+  .chat-suggest{border:1px solid rgba(20,20,20,.08); background:#faf9f6; border-radius:999px; font-size:11.5px; color:var(--ink); padding:7px 10px; cursor:pointer;}
+  .chat-form{display:flex; gap:8px; padding:0 16px 16px; flex-shrink:0;}
+  .chat-input{flex:1; min-width:0; border:1px solid rgba(20,20,20,.12); border-radius:999px; padding:10px 14px; font-size:12.5px; background:#fff; color:var(--ink);}
+  .chat-send{border:none; background:var(--black); color:#fff; border-radius:999px; padding:0 14px; font-weight:700; cursor:pointer;}
+
+  /* ---------- Footer ---------- */
+  .site-footer{display:none;}
+  @media (min-width:900px){
+    .mobile-header{display:none;}
+    .topnav{display:block;}
+    .bottom-nav{display:none;}
+    .chat-fab{bottom:24px;}
+
+    /* Wider card, and let the timeline scroll within itself
+       instead of stretching the whole page down. */
+    .track-card{max-width:640px;}
+    .timeline-section{
+      max-height:440px;
+      overflow-y:auto;
+      padding-right:20px;
+    }
+    .timeline-section::-webkit-scrollbar{width:6px;}
+    .timeline-section::-webkit-scrollbar-thumb{background:var(--line); border-radius:99px;}
+    .timeline-section::-webkit-scrollbar-thumb:hover{background:var(--muted);}
+
+    .site-footer{
+      display:block; margin-top:60px; border-top:1px solid var(--line); padding:44px 20px 30px;
+    }
+    .site-footer .wrap{display:flex; justify-content:space-between; flex-wrap:wrap; gap:30px;}
+    .footer-col h4{font-size:13px; font-weight:700; margin-bottom:14px;}
+    .footer-col a{display:block; font-size:13px; color:var(--muted); margin-bottom:10px;}
+    .footer-bottom{
+      max-width:var(--maxw); margin:30px auto 0; padding:20px 20px 0; border-top:1px solid var(--line);
+      font-size:12px; color:var(--muted);
+    }
+  }
+</style>
+</head>
+
+<body>
+
+  <!-- Desktop top nav -->
+  <header class="topnav">
+    <div class="wrap">
+      <a href="index.html" class="brand" aria-label="Go to home page"><img src="assets/logo-placeholder.png" alt="Oriflame LK" class="brand-logo"></a>
+      <nav class="nav-links">
+        <a href="index.html">Shop</a>
+        <a href="track.html" class="active">Track order</a>
+      </nav>
+      <div class="nav-right">
+        <button class="icon-btn" aria-label="Search">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+        </button>
+        <a href="profile.html" class="icon-btn" aria-label="Account">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Mobile header -->
+  <div class="mobile-header">
+    <div class="row">
+      <a href="index.html" class="mh-back" aria-label="Back to shop">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
+      <div class="mh-title">Track order</div>
+      <div style="width:44px;"></div>
+    </div>
+  </div>
+
+  <!-- Desktop page heading -->
+  <div class="page-head">
+    <h1>Track your order</h1>
+    <p>Enter your waybill ID to see the latest delivery status from Trans Express.</p>
+  </div>
+
+  <!-- ===================================================
+       TRACKING WIDGET
+       API logic unchanged from the original file — only
+       the visual theme (colors, fonts, shapes) was updated
+       to match the rest of the Oriflame LK site.
+       =================================================== -->
+  <div class="track-wrap">
+    <div class="track-card">
+
+      <div class="track-card-header">
+        <div class="track-brand">
+          <div class="track-icon">
+            <!-- truck icon -->
+            <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M1 3h15v13H1z"/>
+              <path d="M16 8h4l3 3v5h-7V8z"/>
+              <circle cx="5.5" cy="18.5" r="2.5"/>
+              <circle cx="18.5" cy="18.5" r="2.5"/>
+            </svg>
+          </div>
+          <h2>Track your package</h2>
+        </div>
+        <p>Enter your waybill ID to see the latest delivery status</p>
+      </div>
+
+      <div class="search-section">
+        <div class="input-row">
+          <input
+            class="waybill-input"
+            id="waybill"
+            placeholder="e.g. TXP123456789"
+            autocomplete="off"
+            spellcheck="false"
+          >
+          <button class="track-btn" id="trackBtn" onclick="track()">
+            Track
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Dynamic result -->
+      <div id="result"></div>
+
+    </div>
+  </div>
+
+  <!-- Desktop footer -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-col">
+        <a href="index.html" class="brand" style="margin-bottom:10px;" aria-label="Go to home page"><img src="assets/logo-placeholder.png" alt="Oriflame LK" class="brand-logo"></a>
+        <p style="font-size:13px; color:var(--muted); max-width:220px; line-height:1.5;">Skincare, makeup and fragrance curated in Sri Lanka with simple ordering, local delivery and WhatsApp support.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="index.html">All products</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="track.html">Track order</a>
+        <a href="returns.html">Returns</a>
+        <a href="shipping.html">Shipping</a>
+        <a href="contact.html">Contact us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="careers.html">Careers</a>
+        <a href="privacy-policy.html">Privacy policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Oriflame LK. Product availability, pricing and delivery timelines are confirmed before dispatch.</div>
+  </footer>
+
+  <!-- Mobile bottom nav -->
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item" aria-label="Home">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg>
+    </a>
+    <a href="categories.html" class="nav-item" aria-label="Categories">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg>
+    </a>
+    <a href="track.html" class="nav-item active" aria-label="Track order">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    </a>
+    <a href="cart.html" class="nav-item" aria-label="Bag" id="mobileBagBtn">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span class="cart-badge" id="mobileBagCount">0</span>
+    </a>
+  </nav>
+
+  <!-- Floating chat assistant button -->
+  <div class="chat-panel" id="chatPanel" aria-live="polite">
+    <div class="chat-header">
+      <div class="chat-title-wrap">
+        <div class="chat-badge">
+          <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.5-.8L3 20l1-4.5a8.4 8.4 0 0 1-.9-3.8A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg>
+        </div>
+        <div class="chat-title">AI beauty assistant</div>
+      </div>
+      <button class="chat-close" type="button" aria-label="Close chat">×</button>
+    </div>
+    <div class="chat-body">
+      <div class="chat-message bot">Hi! I can help you browse skincare, makeup, hair care or current offers.</div>
+      <div class="chat-suggestions">
+        <button type="button" class="chat-suggest">Skincare</button>
+        <button type="button" class="chat-suggest">Makeup</button>
+        <button type="button" class="chat-suggest">Hair</button>
+      </div>
+    </div>
+    <form class="chat-form">
+      <input class="chat-input" type="text" placeholder="Ask about products or offers" aria-label="Chat message" />
+      <button type="submit" class="chat-send">Send</button>
+    </form>
+  </div>
+
+  <button class="chat-fab" aria-label="Chat with us" aria-expanded="false">
+    <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.4 8.4 0 0 1-8.9 8.4 8.6 8.6 0 0 1-3.5-.8L3 20l1-4.5a8.4 8.4 0 0 1-.9-3.8A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z"/></svg>
+  </button>
+
+<script>
+/* =========================================================
+   TRACKING LOGIC — unchanged from the original file.
+   Calls the Trans Express public tracking API directly from
+   the browser. Only the HTML/CSS around it was re-themed.
+   ========================================================= */
+
+/* ── icon helper ───────────────────────────────────────── */
+const alertIcon = `<svg width="16" height="16" viewBox="0 0 24 24" fill="none"
+  stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <circle cx="12" cy="12" r="10"/>
+  <line x1="12" y1="8" x2="12" y2="12"/>
+  <line x1="12" y1="16" x2="12.01" y2="16"/>
+</svg>`;
+
+const CART_KEY = 'oriflameCart';
+function getCart(){
+  try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+  catch { return []; }
+}
+function updateBagCount(){
+  const count = getCart().reduce((sum, item) => sum + Number(item.qty || 0), 0);
+  const mobileCount = document.getElementById('mobileBagCount');
+  if (mobileCount) mobileCount.textContent = count;
+}
+
+const chatFab = document.querySelector('.chat-fab');
+const chatPanel = document.getElementById('chatPanel');
+const chatClose = document.querySelector('.chat-close');
+const chatInput = document.querySelector('.chat-input');
+const chatForm = document.querySelector('.chat-form');
+const chatBody = document.querySelector('.chat-body');
+const chatSuggests = document.querySelectorAll('.chat-suggest');
+
+function addChatBubble(text, isUser = false){
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-message ' + (isUser ? 'user' : 'bot');
+  bubble.textContent = text;
+  chatBody.appendChild(bubble);
+  chatBody.scrollTop = chatBody.scrollHeight;
+}
+
+function getAssistantReply(message){
+  const text = message.toLowerCase();
+  if (text.includes('skincare')) return 'Our skincare picks focus on hydration, glow and everyday care. Try our best-selling cleansers, serums and day creams.';
+  if (text.includes('makeup')) return 'For makeup, we have versatile foundations, lip colors and eye essentials designed for a fresh, polished finish.';
+  if (text.includes('hair')) return 'Hair care favourites include nourishing shampoos, conditioners and repair masks for everyday softness and shine.';
+  if (text.includes('offer') || text.includes('discount') || text.includes('sale')) return 'We regularly feature limited-time savings and bundles. Check the promo offers on the homepage for the latest deals.';
+  if (text.includes('hello') || text.includes('hi')) return 'Hi! I can help you find the right product category or the latest store offers.';
+  return 'I can guide you to skincare, makeup, hair care, or current deals. Ask me for a category or a product type.';
+}
+
+function openChat(){
+  if (!chatPanel || !chatFab) return;
+  chatPanel.classList.add('open');
+  chatFab.setAttribute('aria-expanded', 'true');
+  setTimeout(() => chatInput && chatInput.focus(), 80);
+}
+
+function closeChat(){
+  if (!chatPanel || !chatFab) return;
+  chatPanel.classList.remove('open');
+  chatFab.setAttribute('aria-expanded', 'false');
+}
+
+if (chatFab) {
+  chatFab.addEventListener('click', () => {
+    const isOpen = chatPanel.classList.contains('open');
+    if (isOpen) closeChat(); else openChat();
+  });
+}
+
+if (chatClose) chatClose.addEventListener('click', closeChat);
+
+chatSuggests.forEach(button => {
+  button.addEventListener('click', () => {
+    const value = button.textContent.trim();
+    addChatBubble(value, true);
+    addChatBubble(getAssistantReply(value));
+    if (chatInput) chatInput.value = '';
+  });
+});
+
+if (chatForm) {
+  chatForm.addEventListener('submit', (event) => {
+    event.preventDefault();
+    const value = (chatInput?.value || '').trim();
+    if (!value) return;
+    addChatBubble(value, true);
+    addChatBubble(getAssistantReply(value));
+    if (chatInput) chatInput.value = '';
+    if (chatInput) chatInput.focus();
+  });
+}
+
+/* ── main ─────────────────────────────────────────────── */
+async function track() {
+  const id  = document.getElementById("waybill").value.trim();
+  const out = document.getElementById("result");
+  const btn = document.getElementById("trackBtn");
+
+  /* empty-input guard */
+  if (!id) {
+    out.innerHTML = `<div class="error-wrap">
+      <div class="error-msg">${alertIcon}
+        Please enter a waybill ID before tracking.
+      </div>
+    </div>`;
+    return;
+  }
+
+  /* loading */
+  btn.disabled = true;
+  out.innerHTML = `<div class="loading">
+    <div class="spinner"></div>
+    Looking up your package…
+  </div>`;
+
+  try {
+    const res  = await fetch(
+      `https://api.transexpress.lk/api/v1/tracking?waybill_id=${encodeURIComponent(id)}`
+    );
+    const json = await res.json();
+
+    /* not found */
+    if (json.status_code !== 200) {
+      out.innerHTML = `<div class="error-wrap">
+        <div class="error-msg">${alertIcon}
+          No package found for <strong>${id}</strong>.
+          Please check the waybill ID and try again.
+        </div>
+      </div>`;
+      return;
+    }
+
+    const details = json.data.find(x => x.key === "order_details")?.value[0];
+    const history = [...(json.data.find(x => x.key === "tracking_history")?.value ?? [])].reverse();
+
+    /* ── status block ── */
+    let html = `
+      <div class="status-card">
+        <div class="section-label">Current status</div>
+        <div class="status-badge">
+          <span class="live-dot"></span>
+          ${details.current_status}
+        </div>
+        ${details.description
+          ? `<p class="status-desc">${details.description}</p>`
+          : ""}
+      </div>
+    `;
+
+    /* ── timeline block ── */
+    html += `<div class="timeline-section">
+      <div class="section-label">Delivery history</div>
+      <div class="timeline">`;
+
+    history.forEach(h => {
+      html += `
+        <div class="t-event">
+          <div class="t-spine">
+            <div class="t-dot"></div>
+            <div class="t-line"></div>
+          </div>
+          <div class="t-content">
+            <div class="t-name">${h.status_name}</div>
+            <div class="t-time">${h.status_created_at}</div>
+            ${h.remarks ? `<div class="t-remarks">${h.remarks}</div>` : ""}
+          </div>
+        </div>`;
+    });
+
+    html += `</div></div>`;
+    out.innerHTML = html;
+
+  } catch {
+    out.innerHTML = `<div class="error-wrap">
+      <div class="error-msg">${alertIcon}
+        Unable to reach the tracking service. Please try again.
+      </div>
+    </div>`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+updateBagCount();
+
+/* Enter key shortcut */
+document.getElementById("waybill").addEventListener("keydown", e => {
+  if (e.key === "Enter") track();
+});
+</script>
+
+</body>
+</html>

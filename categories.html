@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse beauty and personal care categories from Oriflame Sri Lanka, including skincare, makeup, fragrance, and wellness essentials.">
+  <meta name="theme-color" content="#141b16">
+  <meta property="og:title" content="Categories — Oriflame Sri Lanka">
+  <meta property="og:description" content="Discover the best beauty categories and curated product collections from Oriflame Sri Lanka.">
+  <meta property="og:type" content="website">
+  <title>Categories — Oriflame LK</title>
+  <link rel="canonical" href="https://example.com/categories.html">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <script defer src="site-core.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#ffffff;
+      --ink:#141b16;
+      --muted:#8a938c;
+      --line:#e9ebe6;
+      --card:#f6f7f4;
+      --green-a:#cdeaa4;
+      --green-b:#9fcf78;
+      --green-ink:#173b1f;
+      --black:#141414;
+      --radius-lg:26px;
+      --radius-md:18px;
+      --radius-sm:14px;
+      --radius-full:999px;
+      --maxw:1200px;
+    }
+    *{box-sizing:border-box; margin:0; padding:0;}
+    html{scroll-behavior:smooth;}
+    body{
+      font-family:'Plus Jakarta Sans', system-ui, sans-serif;
+      color:var(--ink);
+      background:var(--bg);
+      -webkit-font-smoothing:antialiased;
+      padding-bottom:84px;
+    }
+    a{color:inherit; text-decoration:none;}
+    button{font-family:inherit; cursor:pointer;}
+    img{display:block; max-width:100%;}
+    .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px;}
+
+    .topnav{
+      display:none;
+      position:sticky; top:0; z-index:50;
+      background:rgba(255,255,255,.9);
+      backdrop-filter:blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .topnav .wrap{display:flex; align-items:center; justify-content:space-between; height:78px;}
+    .brand{display:flex; align-items:center; gap:10px; font-weight:800; font-size:20px; letter-spacing:-.02em;}
+    .brand-logo{height:28px; width:auto; display:block; object-fit:contain; filter:drop-shadow(0 2px 4px rgba(20,23,18,.08));}
+    .brand .dot{width:10px; height:10px; border-radius:50%; background:linear-gradient(135deg,var(--green-a),var(--green-b));}
+    .brand-lk{
+      font-size:10px; font-weight:800; background:var(--black); color:#fff;
+      padding:2px 6px; border-radius:5px; margin-left:2px; letter-spacing:.03em;
+    }
+    .nav-links{display:flex; gap:34px; font-weight:600; font-size:14.5px; color:var(--ink);}
+    .nav-links a{opacity:.7; transition:opacity .15s;}
+    .nav-links a:hover, .nav-links a.active{opacity:1;}
+    .nav-right{display:flex; align-items:center; gap:18px;}
+    .icon-btn{
+      width:42px; height:42px; border-radius:50%; border:1px solid var(--line);
+      display:flex; align-items:center; justify-content:center; background:#fff; position:relative;
+    }
+    .icon-btn svg{width:18px; height:18px;}
+    .badge{
+      position:absolute; top:-4px; right:-4px; background:var(--black); color:#fff;
+      font-size:10px; font-weight:700; width:17px; height:17px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+    }
+
+    .mobile-header{padding:22px 20px 4px;}
+    .mobile-header .row{padding:0 0 0 0;}
+    .mobile-header .row{display:flex; align-items:center; justify-content:space-between;}
+    .mh-title{font-size:19px; font-weight:800; letter-spacing:-.02em;}
+    .mh-action{
+      width:44px; height:44px; border-radius:50%; border:1px solid var(--line);
+      display:flex; align-items:center; justify-content:center; background:#fff;
+    }
+
+    .page{
+      width:100%; max-width:var(--maxw); margin:0 auto; padding:18px 20px 32px;
+    }
+    .page-head{padding:8px 0 20px;}
+    .eyebrow{
+      display:inline-flex; align-items:center; padding:7px 12px; border-radius:var(--radius-full);
+      background:var(--card); border:1px solid var(--line); font-size:11px; font-weight:800;
+      letter-spacing:.12em; text-transform:uppercase; color:var(--muted);
+    }
+    .page-head h1{margin-top:14px; font-size:clamp(30px,3vw,48px); letter-spacing:-.05em; line-height:1.05;}
+    .page-head p{margin-top:10px; color:var(--muted); font-size:14px; line-height:1.6; max-width:640px;}
+
+    .category-grid{
+      display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px; padding:10px 0 18px; align-items:stretch;
+    }
+    .category-card{
+      width:100%; height:100%; border:1px solid var(--line); border-radius:var(--radius-lg); background:linear-gradient(135deg,#f8f9f7,#eef2ec);
+      padding:18px 16px; text-align:left; min-height:150px; display:flex; flex-direction:column; justify-content:space-between; align-items:stretch;
+      transition:transform .15s ease, border-color .15s ease, box-shadow .15s ease;
+    }
+    .category-card:hover{transform:translateY(-1px); border-color:#d7ddd3; box-shadow:0 10px 24px rgba(20,20,20,.04);}
+    .category-card.active{background:var(--black); color:#fff; border-color:var(--black);}
+    .category-card .label{font-size:11px; font-weight:800; letter-spacing:.14em; text-transform:uppercase; opacity:.7;}
+    .category-card h3{font-size:22px; letter-spacing:-.04em; line-height:1.1; margin-top:10px;}
+    .category-card .meta{font-size:12px; font-weight:700; opacity:.8;}
+
+    .category-section{padding:14px 0 24px;}
+    .category-head{
+      display:flex; align-items:baseline; justify-content:space-between; gap:12px;
+      margin-bottom:14px; padding-bottom:6px; border-bottom:1px solid var(--line);
+    }
+    .category-head h2{font-size:22px; letter-spacing:-.04em;}
+    .category-head span{font-size:12.5px; color:var(--muted); font-weight:700;}
+
+    .product-grid{display:grid; grid-template-columns:repeat(2, minmax(0,1fr)); gap:14px; padding:0;}
+    .card{
+      background:var(--card); border-radius:20px; padding:14px; position:relative; display:flex; flex-direction:column;
+    }
+    .badge-tag{
+      position:absolute; top:12px; left:12px; background:var(--black); color:#fff;
+      font-size:9.5px; font-weight:700; letter-spacing:.03em; padding:5px 9px; border-radius:var(--radius-full);
+      z-index:2;
+    }
+    .badge-tag.oos{background:#fff; color:var(--muted); border:1px solid var(--line);}
+    .card.oos{opacity:.6;}
+    .card.oos .add-btn{background:var(--line); cursor:not-allowed;}
+    .fav-btn{
+      position:absolute; top:10px; right:10px; width:30px; height:30px; border-radius:50%;
+      background:#fff; border:none; display:flex; align-items:center; justify-content:center; z-index:2;
+    }
+    .fav-btn svg{width:15px; height:15px; stroke:var(--ink); fill:none; transition:.15s;}
+    .fav-btn.active svg{fill:#e0554f; stroke:#e0554f;}
+    .product-link{display:block;}
+    .card-img{width:100%; height:120px; object-fit:contain; object-position:center; margin:12px 0 12px;}
+    .card-brand{font-size:11px; color:var(--muted); font-weight:600; margin-bottom:2px;}
+    .card-name{font-size:13px; font-weight:700; line-height:1.3; min-height:34px;}
+    .card-bottom{display:flex; align-items:center; justify-content:space-between; margin-top:10px;}
+    .card-price{font-size:14px; font-weight:800;}
+    .stock-count{font-size:11px; color:var(--muted); font-weight:700; margin-top:8px;}
+    .add-btn{
+      width:32px; height:32px; border-radius:50%; background:var(--black); border:none;
+      display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+    }
+    .add-btn svg{width:14px; height:14px; stroke:#fff;}
+    .add-btn.adding{animation:addPulse .45s ease;}
+    .empty-state{
+      padding:24px 18px; border:1px dashed var(--line); border-radius:var(--radius-md);
+      background:var(--card); color:var(--muted); text-align:center; font-size:14px;
+    }
+    .fly-cart-img{
+      position:fixed; z-index:120; width:76px; height:76px; object-fit:contain;
+      pointer-events:none; border-radius:20px; background:var(--card); padding:9px;
+      box-shadow:0 16px 34px rgba(20,20,20,.16);
+      transition:transform .72s cubic-bezier(.2,.72,.2,1), opacity .72s ease;
+    }
+
+    .bottom-nav{
+      position:fixed; bottom:0; left:0; right:0; z-index:60;
+      background:#fff; border-top:1px solid var(--line);
+      display:flex; align-items:center; justify-content:space-around;
+      padding:12px 10px calc(12px + env(safe-area-inset-bottom));
+    }
+    .nav-item{
+      display:flex; flex-direction:column; align-items:center; gap:5px;
+      color:var(--muted); position:relative; background:none; border:none;
+      text-decoration:none;
+    }
+    .nav-item svg{width:22px; height:22px; stroke:var(--muted); fill:none;}
+    .nav-item.active{color:var(--ink);} .nav-item.active svg{stroke:var(--ink);}
+    .nav-item.active::after{
+      content:""; position:absolute; bottom:-9px; width:16px; height:2.5px; background:var(--ink); border-radius:2px;
+    }
+    .cart-badge{
+      position:absolute; top:-6px; right:-8px; background:var(--black); color:#fff;
+      font-size:9px; font-weight:700; width:15px; height:15px; border-radius:50%;
+      display:flex; align-items:center; justify-content:center;
+    }
+    .site-footer{
+      display:none;
+      margin-top:32px;
+      border-top:1px solid var(--line);
+      background:#fff;
+      padding:32px 20px 24px;
+    }
+    .site-footer .wrap{max-width:var(--maxw); margin:0 auto; display:flex; justify-content:space-between; flex-wrap:wrap; gap:28px;}
+    .footer-col{min-width:150px;}
+    .footer-col h4{font-size:13px; font-weight:700; margin-bottom:14px;}
+    .footer-col a{display:block; font-size:13px; color:var(--muted); margin-bottom:10px;}
+    .footer-bottom{max-width:var(--maxw); margin:28px auto 0; padding-top:20px; border-top:1px solid var(--line); font-size:12px; color:var(--muted);}
+
+    @keyframes addPulse{
+      0%{transform:scale(1);} 45%{transform:scale(.96);} 100%{transform:scale(1);}
+    }
+
+    @media (min-width:600px) and (max-width:899px){
+      .product-grid{grid-template-columns:repeat(3, minmax(0,1fr));}
+    }
+    @media (min-width:900px){
+      body{padding-bottom:0;}
+      .topnav{display:block;}
+      .mobile-header{display:none;}
+      .bottom-nav{display:none;}
+      .site-footer{display:block;}
+      .page{padding:34px 0 54px;}
+      .category-grid{grid-template-columns:repeat(3, minmax(0,1fr)); gap:18px;}
+      .category-card{min-height:180px; padding:22px 20px;}
+      .product-grid{grid-template-columns:repeat(4,minmax(0,1fr)); gap:20px;}
+      .card-img{height:150px;}
+      .card-name{font-size:14px;}
+    }
+  </style>
+</head>
+<body>
+  <header class="topnav">
+    <div class="wrap">
+      <a href="index.html" class="brand" aria-label="Go to home page"><img src="assets/logo-placeholder.png" alt="Oriflame LK" class="brand-logo"></a>
+      <nav class="nav-links">
+        <a href="categories.html" class="active">Categories</a>
+        <a href="index.html#new-arrivals">New arrivals</a>
+        <a href="track.html">Track order</a>
+      </nav>
+      <div class="nav-right">
+        <a href="track.html" class="icon-btn" aria-label="Track order">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <div class="mobile-header">
+    <div class="row">
+      <a href="index.html" class="mh-action" aria-label="Back to home">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
+      <div class="mh-title">Categories</div>
+      <a href="cart.html" class="mh-action" aria-label="Bag">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#141414" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      </a>
+    </div>
+  </div>
+
+  <main class="page">
+    <section class="page-head">
+      <span class="eyebrow">Shop by routine</span>
+      <h1>Discover the right category for you</h1>
+      <p>Explore our skincare, makeup, fragrance, hair and bath &amp; body favorites — chosen to keep your beauty routine simple and beautiful.</p>
+    </section>
+
+    <div id="categoryGrid" class="category-grid"></div>
+    <div id="categorySections"></div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="wrap">
+      <div class="footer-col">
+        <a href="index.html" class="brand" style="margin-bottom:10px;" aria-label="Go to home page"><img src="assets/logo-placeholder.png" alt="Oriflame LK" class="brand-logo"></a>
+        <p style="font-size:13px; color:var(--muted); max-width:220px; line-height:1.5;">Skincare, makeup and fragrance curated in Sri Lanka with simple ordering, local delivery and WhatsApp support.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Shop</h4>
+        <a href="categories.html?cat=Skincare">Skincare</a>
+        <a href="categories.html?cat=Makeup">Makeup</a>
+        <a href="categories.html?cat=Fragrance">Fragrance</a>
+        <a href="categories.html?cat=Hair">Hair</a>
+      </div>
+      <div class="footer-col">
+        <h4>Help</h4>
+        <a href="track.html">Track order</a>
+        <a href="returns.html">Returns</a>
+        <a href="shipping.html">Shipping</a>
+        <a href="contact.html">Contact us</a>
+      </div>
+      <div class="footer-col">
+        <h4>Company</h4>
+        <a href="about.html">About</a>
+        <a href="careers.html">Careers</a>
+        <a href="privacy-policy.html">Privacy policy</a>
+      </div>
+    </div>
+    <div class="footer-bottom">© 2026 Oriflame LK. Product availability, pricing and delivery timelines are confirmed before dispatch.</div>
+  </footer>
+
+  <nav class="bottom-nav">
+    <a href="index.html" class="nav-item" aria-label="Home">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5 10v10h14V10"/></svg>
+    </a>
+    <a href="categories.html" class="nav-item active" aria-label="Categories">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="7" x2="20" y2="7"/><line x1="4" y1="12" x2="20" y2="12"/><line x1="4" y1="17" x2="14" y2="17"/></svg>
+    </a>
+    <a href="track.html" class="nav-item" aria-label="Track order">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 3h15v13H1z"/><path d="M16 8h4l3 3v5h-7V8z"/><circle cx="5.5" cy="18.5" r="2.5"/><circle cx="18.5" cy="18.5" r="2.5"/></svg>
+    </a>
+    <a href="cart.html" class="nav-item" aria-label="Bag" id="mobileBagBtn">
+      <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
+      <span class="cart-badge" id="mobileBagCount">0</span>
+    </a>
+  </nav>
+
+  <script>
+    const INVENTORY_KEY = 'oriflameInventory';
+    const CART_KEY = 'oriflameCart';
+    const CATEGORY_KEY = 'oriflameCategories';
+    const CUSTOMER_PREF_KEY = 'oriflameCustomerPrefs';
+    function getCustomerPrefs(){
+      try {
+        const saved = JSON.parse(localStorage.getItem(CUSTOMER_PREF_KEY));
+        return saved && typeof saved === 'object' ? saved : { preferredCategories: [], recentCategories: [] };
+      } catch { return { preferredCategories: [], recentCategories: [] }; }
+    }
+    function saveCustomerPrefs(prefs){ localStorage.setItem(CUSTOMER_PREF_KEY, JSON.stringify(prefs)); }
+    function recordCustomerPreference(category){
+      if (!category) return;
+      const prefs = getCustomerPrefs();
+      const categories = Array.isArray(prefs.preferredCategories) ? prefs.preferredCategories : [];
+      const recent = Array.isArray(prefs.recentCategories) ? prefs.recentCategories : [];
+      const next = categories.includes(category) ? categories : [category, ...categories];
+      saveCustomerPrefs({
+        ...prefs,
+        preferredCategories: next.slice(0, 5),
+        recentCategories: [category, ...recent.filter(item => item !== category)].slice(0, 8),
+        lastCategory: category
+      });
+    }
+    function getCategoryList(){
+      try {
+        const saved = JSON.parse(localStorage.getItem(CATEGORY_KEY));
+        return Array.isArray(saved) ? saved : [];
+      } catch {
+        return [];
+      }
+    }
+    let CATEGORY_LIST = getCategoryList().map(cat => cat.name);
+
+    function getInventoryCatalog(){
+      try {
+        const saved = JSON.parse(localStorage.getItem(INVENTORY_KEY));
+        if (Array.isArray(saved)) return saved;
+      } catch {}
+      return [];
+    }
+    function getCart(){
+      try { return JSON.parse(localStorage.getItem(CART_KEY)) || []; }
+      catch { return []; }
+    }
+    function saveCart(cart){ localStorage.setItem(CART_KEY, JSON.stringify(cart)); }
+    function normalizeProduct(item){
+      const stock = Number(item.stock || 0);
+      const status = item.status || (stock <= 0 ? 'Out of stock' : 'Active');
+      return {
+        ...item,
+        stock,
+        brand:item.brand || 'Oriflame LK',
+        name:item.name || 'Product',
+        cat:item.cat || 'Skincare',
+        price:item.price || 'Rs. 0',
+        image:item.image || 'productImage.webp',
+        tag: status === 'Out of stock' ? 'OUT OF STOCK' : item.tag || null,
+        status
+      };
+    }
+
+    const catalog = getInventoryCatalog().map(normalizeProduct).filter(item => item.status !== 'Hidden');
+
+    function getSelectedCategory(){
+      if (!CATEGORY_LIST.length) return null;
+      const params = new URLSearchParams(window.location.search);
+      const cat = params.get('cat');
+      return CATEGORY_LIST.includes(cat) ? cat : CATEGORY_LIST[0];
+    }
+
+    function getAvailableStock(slug){
+      const item = catalog.find(p => p.slug === slug);
+      return item ? Math.max(0, Number(item.stock || 0)) : 0;
+    }
+
+    function updateBagCount(){
+      const count = getCart().reduce((sum, item) => sum + Number(item.qty || 0), 0);
+      const mobile = document.getElementById('mobileBagCount');
+      if (mobile) mobile.textContent = count;
+    }
+
+    function setCategory(cat){
+      recordCustomerPreference(cat);
+      const url = new URL(window.location.href);
+      url.searchParams.set('cat', cat);
+      history.pushState({}, '', url);
+      renderCategoryGrid(cat);
+      renderSections(cat);
+    }
+
+    function renderCategoryGrid(activeCat){
+      if (!CATEGORY_LIST.length) {
+        document.getElementById('categoryGrid').innerHTML = '<div class="empty-state">No categories added yet. Create categories in the admin panel to populate this page.</div>';
+        return;
+      }
+      const html = CATEGORY_LIST.map(cat => {
+        const count = catalog.filter(item => item.cat === cat).length;
+        return `
+          <button class="category-card ${activeCat === cat ? 'active' : ''}" data-cat="${cat}" type="button">
+            <div class="label">Shop now</div>
+            <div>
+              <h3>${cat}</h3>
+              <div class="meta">${count} products</div>
+            </div>
+          </button>
+        `;
+      }).join('');
+      document.getElementById('categoryGrid').innerHTML = html;
+    }
+
+    function productCard(item){
+      const unavailable = item.status === 'Out of stock' || getAvailableStock(item.slug) <= 0;
+      const stockLabel = unavailable ? 'Out of stock' : getAvailableStock(item.slug) <= 3 ? `${getAvailableStock(item.slug)} left` : `${getAvailableStock(item.slug)} in stock`;
+      return `
+        <article class="card ${unavailable ? 'oos' : ''}">
+          ${item.tag ? `<span class="badge-tag ${unavailable ? 'oos' : ''}">${item.tag}</span>` : ''}
+          <button class="fav-btn" type="button" aria-label="Save to wishlist">
+            <svg viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.6l-1-1a5.5 5.5 0 0 0-7.8 7.8l1 1L12 21l7.8-7.6 1-1a5.5 5.5 0 0 0 0-7.8z"/></svg>
+          </button>
+          <a class="product-link" href="product.html?item=${item.slug}" aria-label="View ${item.name}">
+            <img class="card-img" src="${item.image}" alt="${item.name}">
+            <div class="card-brand">${item.brand}</div>
+            <div class="card-name">${item.name}</div>
+          </a>
+          <div class="stock-count">${stockLabel}</div>
+          <div class="card-bottom">
+            <div class="card-price">${item.price}</div>
+            <button class="add-btn" type="button" data-slug="${item.slug}" aria-label="Add ${item.name} to bag" ${unavailable ? 'disabled' : ''}>
+              <svg viewBox="0 0 24 24" stroke-width="2.5" stroke-linecap="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            </button>
+          </div>
+        </article>
+      `;
+    }
+
+    function renderSections(activeCat){
+      const cat = activeCat || CATEGORY_LIST[0] || null;
+      if (!cat) {
+        document.getElementById('categorySections').innerHTML = '<div class="empty-state">No categories or products are available yet. Add them from the admin panel.</div>';
+        return;
+      }
+      const items = catalog.filter(item => item.cat === cat);
+      const sectionCards = items.length
+        ? items.map(productCard).join('')
+        : '<div class="empty-state">No products in this category yet — check back soon.</div>';
+
+      document.getElementById('categorySections').innerHTML = `
+        <section class="category-section">
+          <div class="category-head">
+            <h2>${cat}</h2>
+            <span>${items.length} items</span>
+          </div>
+          <div class="product-grid">${sectionCards}</div>
+        </section>
+      `;
+    }
+
+    function addToCart(slug){
+      const product = catalog.find(item => item.slug === slug);
+      if (!product || getAvailableStock(slug) <= 0) return false;
+
+      const cart = getCart();
+      const existing = cart.find(item => item.slug === slug);
+      if (existing) existing.qty = Math.min(99, Number(existing.qty || 0) + 1);
+      else cart.push({ slug, qty: 1, addedAt: Date.now() });
+      saveCart(cart);
+      updateBagCount();
+      return true;
+    }
+
+    document.body.addEventListener('click', (event) => {
+      const productLink = event.target.closest('.product-link');
+      if (productLink) {
+        const slug = productLink.getAttribute('href')?.split('item=')[1];
+        const product = catalog.find(item => item.slug === slug);
+        if (product) recordCustomerPreference(product.cat);
+      }
+
+      const card = event.target.closest('.category-card');
+      if (card) {
+        const cat = card.dataset.cat;
+        setCategory(cat);
+        return;
+      }
+
+      const addBtn = event.target.closest('.add-btn');
+      if (addBtn && !addBtn.disabled) {
+        const slug = addBtn.dataset.slug;
+        const success = addToCart(slug);
+        if (success) {
+          addBtn.classList.remove('adding');
+          void addBtn.offsetWidth;
+          addBtn.classList.add('adding');
+          const img = addBtn.closest('.card')?.querySelector('.card-img');
+          const target = document.getElementById('mobileBagBtn');
+          if (img && target) {
+            const from = img.getBoundingClientRect();
+            const to = target.getBoundingClientRect();
+            const ghost = img.cloneNode(true);
+            ghost.className = 'fly-cart-img';
+            ghost.style.left = `${from.left + from.width / 2 - 32}px`;
+            ghost.style.top = `${from.top + from.height / 2 - 32}px`;
+            document.body.appendChild(ghost);
+            requestAnimationFrame(() => {
+              ghost.style.transform = `translate(${to.left + to.width / 2 - from.left - from.width / 2}px, ${to.top + to.height / 2 - from.top - from.height / 2}px) scale(.35) rotate(10deg)`;
+              ghost.style.opacity = '.15';
+            });
+            setTimeout(() => ghost.remove(), 760);
+          }
+        }
+        return;
+      }
+
+      const favBtn = event.target.closest('.fav-btn');
+      if (favBtn) {
+        favBtn.classList.toggle('active');
+      }
+    });
+
+    window.addEventListener('popstate', () => {
+      const selected = getSelectedCategory();
+      renderCategoryGrid(selected);
+      renderSections(selected);
+    });
+
+    window.addEventListener('storage', (event) => {
+      if (event.key === INVENTORY_KEY || event.key === CATEGORY_KEY) {
+        CATEGORY_LIST = getCategoryList().map(cat => cat.name);
+        const selected = getSelectedCategory();
+        renderCategoryGrid(selected);
+        renderSections(selected);
+      }
+    });
+
+    updateBagCount();
+    const initial = getSelectedCategory();
+    renderCategoryGrid(initial);
+    renderSections(initial);
+  </script>
+</body>
+</html>
