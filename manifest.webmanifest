@@ -1,0 +1,17 @@
+{
+  "name": "Oriflame Sri Lanka",
+  "short_name": "Oriflame",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#141b16",
+  "description": "Beauty, skincare, makeup and personal care shopping experience from Oriflame Sri Lanka.",
+  "icons": [
+    {
+      "src": "/productImage.webp",
+      "sizes": "512x512",
+      "type": "image/webp",
+      "purpose": "any maskable"
+    }
+  ]
+}

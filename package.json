@@ -1,0 +1,20 @@
+{
+  "name": "oriflame-storefront",
+  "version": "1.0.0",
+  "description": "Oriflame storefront with admin dashboard and persistent backend storage",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "migrate": "node scripts/run-migrations.js",
+    "admin:seed": "node scripts/seed-admin.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "express-rate-limit": "^8.6.2",
+    "helmet": "^8.3.0",
+    "pg": "^8.12.0",
+    "sqlite3": "^6.0.1"
+  }
+}
